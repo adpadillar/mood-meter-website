@@ -9,4 +9,7 @@ export const mainRouter = createTRPCRouter({
         greeting: `Hello ${input.text}`,
       };
     }),
+  getSong: publicProcedure.query(() => {
+    return "Cold.mp3" as const;
+  }),
 });

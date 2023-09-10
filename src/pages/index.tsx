@@ -1,4 +1,5 @@
 import type { NextPage } from "next";
+import Experiment from "~/components/Experiment";
 
 interface HomeProps {
   children?: React.ReactNode;
@@ -6,8 +7,11 @@ interface HomeProps {
 
 const Home: NextPage<HomeProps> = () => {
   return (
-    <div>
-      <h1>This is a page</h1>
+    <div className="p-10">
+      <h1 className="text-4xl font-extrabold">
+        ¡Escoge la emoción de esta canción!
+      </h1>
+      <Experiment />
     </div>
   );
 };
