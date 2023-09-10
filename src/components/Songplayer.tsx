@@ -23,6 +23,8 @@ const Songplayer: React.FC<SongplayerProps> = ({
   useEffect(() => {
     if (!isLoading) {
       const audio = new Audio(songSrc);
+      audio.load();
+      audio.pause();
       audio.currentTime = startSeconds;
       setAudio(audio);
     }
