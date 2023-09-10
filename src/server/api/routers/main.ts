@@ -1,4 +1,4 @@
-import { readdirSync } from "fs";
+import { readFileSync, readdirSync } from "fs";
 import { z } from "zod";
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
 
@@ -11,13 +11,14 @@ export const mainRouter = createTRPCRouter({
       };
     }),
   getSong: publicProcedure.query(() => {
-    // load filenames in public/
-    const songs = readdirSync("./public").filter((file) => {
-      return file.endsWith(".mp3");
-    });
+    // load json file in src/songs/songs.json
+    const fileContent = readFileSync("src/songs/songs.json", "utf-8");
+    const songs = JSON.parse(fileContent) as { files: string[] };
 
-    const song = songs[Math.floor(Math.random() * songs.length)];
+    // get random song
+    const randomSong =
+      songs.files[Math.floor(Math.random() * songs.files.length)];
 
-    return song;
+    return randomSong;
   }),
 });
