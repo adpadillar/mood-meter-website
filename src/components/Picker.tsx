@@ -1,92 +1,91 @@
 import React, { useState, useEffect, useRef } from "react";
 
-interface PickerProps {
+interface MoodpickerProps {
   onChange: (x: number, y: number) => void;
   height?: number;
   width?: number;
   pickerSize?: number;
 }
 
-const Picker: React.FC<PickerProps> = ({
+const Moodpicker: React.FC<MoodpickerProps> = ({
   onChange,
   height = 300,
   width = 300,
   pickerSize = 10,
 }) => {
   const [isDragging, setIsDragging] = useState(false);
+  const [x, setX] = useState((width - pickerSize) / 2 + 1);
+  const [y, setY] = useState((height - pickerSize) / 2 + 1);
   const pickerRef = useRef<HTMLDivElement>(null);
   const dotRef = useRef<HTMLDivElement>(null);
-  const [x, setX] = useState<number>((width - pickerSize) / 2 + 1);
-  const [y, setY] = useState<number>((height - pickerSize) / 2 + 1);
 
   useEffect(() => {
     onChange(x, y);
   }, [x, y, onChange]);
 
-  useEffect(() => {
-    const handleMouseMove = (event: MouseEvent) => {
-      if (isDragging && pickerRef.current && dotRef.current) {
-        const rect = pickerRef.current.getBoundingClientRect();
-        const offsetX = event.clientX - rect.left;
-        const offsetY = event.clientY - rect.top;
+  const handleMove = (clientX: number, clientY: number) => {
+    if (pickerRef.current && dotRef.current) {
+      const rect = pickerRef.current.getBoundingClientRect();
+      const offsetX = clientX - rect.left;
+      const offsetY = clientY - rect.top;
 
-        if (offsetX < 0 || offsetX > rect.width - dotRef.current.clientWidth) {
-          // out of bounds in x direction
-          // set x to min or max value depending on which side it's out of bounds
-
-          // left side
-          if (offsetX < 0) {
-            setX(0);
-          }
-
-          // right side
-          if (offsetX > rect.width - dotRef.current.clientWidth) {
-            setX(rect.width - dotRef.current.clientWidth);
-          }
+      if (offsetX < 0 || offsetX > rect.width - dotRef.current.clientWidth) {
+        // Handle out of bounds in x direction
+        if (offsetX < 0) {
+          setX(0);
         } else {
-          // in bounds in x direction
-          setX(offsetX);
+          setX(rect.width - dotRef.current.clientWidth);
         }
-
-        if (
-          offsetY < 0 ||
-          offsetY > rect.height - dotRef.current.clientHeight
-        ) {
-          // out of bounds in y direction
-          // set y to min or max value depending on which side it's out of bounds
-
-          // top side
-          if (offsetY < 0) {
-            setY(0);
-          }
-
-          // bottom side
-          if (offsetY > rect.height - dotRef.current.clientHeight) {
-            setY(rect.height - dotRef.current.clientHeight);
-          }
-        } else {
-          // in bounds in y direction
-          setY(offsetY);
-        }
+      } else {
+        setX(offsetX);
       }
-    };
 
-    const handleMouseUp = () => {
-      setIsDragging(false);
-    };
-
-    document.addEventListener("mousemove", handleMouseMove);
-    document.addEventListener("mouseup", handleMouseUp);
-
-    return () => {
-      document.removeEventListener("mousemove", handleMouseMove);
-      document.removeEventListener("mouseup", handleMouseUp);
-    };
-  }, [isDragging, onChange]);
+      if (offsetY < 0 || offsetY > rect.height - dotRef.current.clientHeight) {
+        // Handle out of bounds in y direction
+        if (offsetY < 0) {
+          setY(0);
+        } else {
+          setY(rect.height - dotRef.current.clientHeight);
+        }
+      } else {
+        setY(offsetY);
+      }
+    }
+  };
 
   const handleMouseDown = () => {
     setIsDragging(true);
   };
+
+  const handleMouseUp = () => {
+    setIsDragging(false);
+  };
+
+  useEffect(() => {
+    const handleMouseMove = (event: MouseEvent) => {
+      if (isDragging) {
+        handleMove(event.clientX, event.clientY);
+      }
+    };
+
+    const handleTouchMove = (event: TouchEvent) => {
+      event.preventDefault(); // Prevent scrolling
+      const touch = event.touches[0];
+      handleMove(touch?.clientX ?? 0, touch?.clientY ?? 0);
+    };
+
+    document.addEventListener("mousemove", handleMouseMove);
+    document.addEventListener("mouseup", handleMouseUp);
+    document.addEventListener("touchmove", handleTouchMove);
+    document.addEventListener("touchend", handleMouseUp);
+
+    return () => {
+      document.removeEventListener("mousemove", handleMouseMove);
+      document.removeEventListener("mouseup", handleMouseUp);
+      document.removeEventListener("touchmove", handleTouchMove);
+      document.removeEventListener("touchend", handleMouseUp);
+    };
+  }, [isDragging]);
 
   return (
     <div
@@ -98,8 +97,14 @@ const Picker: React.FC<PickerProps> = ({
         height: `${height}px`,
         backgroundColor: "#f0f0f0",
         cursor: isDragging ? "grabbing" : "grab",
+        touchAction: "none", // Prevents default touch behavior (like scrolling)
       }}
       onMouseDown={handleMouseDown}
+      onTouchStart={handleMouseDown}
+      onClick={(e) => {
+        e.stopPropagation();
+        handleMove(e.clientX, e.clientY);
+      }}
     >
       {/* Horizontal Axis */}
       <div
@@ -136,4 +141,4 @@ const Picker: React.FC<PickerProps> = ({
   );
 };
 
-export default Picker;
+export default Moodpicker;

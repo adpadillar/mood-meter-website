@@ -11,6 +11,8 @@ interface ExperimentProps {
 const Experiment: React.FC<ExperimentProps> = () => {
   const { data, isLoading } = api.example.getSong.useQuery();
   const [started, setStarted] = useState(false);
+  const [x, setX] = useState(0);
+  const [y, setY] = useState(0);
 
   return (
     <>
@@ -30,7 +32,18 @@ const Experiment: React.FC<ExperimentProps> = () => {
         songSrc={data}
         startSeconds={5}
       />
-      <Picker height={200} onChange={(x, y) => console.log(x, y)} />
+      <Picker
+        height={200}
+        onChange={(x, y) => {
+          setX(x);
+          setY(y);
+        }}
+      />
+      <div>
+        <p>
+          x: {x} y: {y}
+        </p>
+      </div>
     </>
   );
 };
