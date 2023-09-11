@@ -1,7 +1,9 @@
-import { UserButton, clerkClient } from "@clerk/nextjs";
-import { getAuth } from "@clerk/nextjs/server";
+import { UserButton } from "@clerk/nextjs";
+
 import type { GetServerSideProps, NextPage } from "next";
-import { UploadButton } from "~/components/Uploadthing";
+import Fileviewer from "~/components/Fileviewer";
+
+import verifyUser from "~/server/auth/verifyUser";
 
 interface DashboardProps {
   children?: React.ReactNode;
@@ -10,9 +12,21 @@ interface DashboardProps {
 const Dashboard: NextPage<DashboardProps> = () => {
   return (
     <>
-      <UserButton />
+      <div className="max-w-5xl p-4">
+        <UserButton />
 
-      <UploadButton endpoint="audioUploader" />
+        <h1>Scary uploader</h1>
+        <Fileviewer endpoint="scaryUploader" />
+
+        <h1>Happy uploader</h1>
+        <Fileviewer endpoint="happyUploader" />
+
+        <h1>Sad uploader</h1>
+        <Fileviewer endpoint="sadUploader" />
+
+        <h1>Calm uploader</h1>
+        <Fileviewer endpoint="calmUploader" />
+      </div>
     </>
   );
 };
@@ -21,24 +35,13 @@ export const getServerSideProps: GetServerSideProps<DashboardProps> = async (
   ctx
 ) => {
   const { req } = ctx;
-  const { userId } = getAuth(req);
 
-  const user = userId ? await clerkClient.users.getUser(userId) : null;
+  const allowedUser = await verifyUser(req);
 
-  const allowedEmails: Record<string, true> = {
-    "adpadillar25@gmail.com": true,
-  };
-
-  if (user) {
-    if (user.emailAddresses) {
-      for (const email of user.emailAddresses) {
-        if (allowedEmails[email.emailAddress]) {
-          return {
-            props: {},
-          };
-        }
-      }
-    }
+  if (allowedUser) {
+    return {
+      props: {},
+    };
   }
 
   return {

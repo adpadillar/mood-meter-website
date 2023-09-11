@@ -1,8 +1,9 @@
 import { type Config } from "tailwindcss";
 // tailwind.config.js
 import { nextui } from "@nextui-org/react";
+import { withUt } from "uploadthing/tw";
 
-export default {
+export default withUt({
   content: [
     "./src/**/*.{js,ts,jsx,tsx}",
     "./node_modules/@nextui-org/theme/dist/**/*.{js,ts,jsx,tsx}",
@@ -11,4 +12,4 @@ export default {
     extend: {},
   },
   plugins: [nextui()],
-} satisfies Config;
+}) satisfies Config;
