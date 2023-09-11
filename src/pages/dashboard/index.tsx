@@ -11,23 +11,34 @@ interface DashboardProps {
 
 const Dashboard: NextPage<DashboardProps> = () => {
   return (
-    <>
+    <div className="flex w-full items-center justify-center">
       <div className="max-w-5xl p-4">
-        <UserButton />
+        <div className="flex items-center justify-between py-4">
+          <h1 className="font-bold">Neurosense Art</h1>
+          <UserButton />
+        </div>
+        <div className="mt-6 grid grid-cols-2 gap-6">
+          <div className="flex flex-col space-y-3">
+            <h1 className="text-3xl font-bold">Canciones Miedo</h1>
+            <Fileviewer endpoint="scaryUploader" />
+          </div>
+          <div className="flex flex-col space-y-3">
+            <h1 className="text-3xl font-bold">Canciones Felices</h1>
+            <Fileviewer endpoint="happyUploader" />
+          </div>
 
-        <h1>Scary uploader</h1>
-        <Fileviewer endpoint="scaryUploader" />
+          <div className="flex flex-col space-y-3">
+            <h1 className="text-3xl font-bold">Canciones Tristes</h1>
+            <Fileviewer endpoint="sadUploader" />
+          </div>
 
-        <h1>Happy uploader</h1>
-        <Fileviewer endpoint="happyUploader" />
-
-        <h1>Sad uploader</h1>
-        <Fileviewer endpoint="sadUploader" />
-
-        <h1>Calm uploader</h1>
-        <Fileviewer endpoint="calmUploader" />
+          <div className="flex flex-col space-y-3">
+            <h1 className="text-3xl font-bold">Canciones Calma</h1>
+            <Fileviewer endpoint="calmUploader" />
+          </div>
+        </div>
       </div>
-    </>
+    </div>
   );
 };
 

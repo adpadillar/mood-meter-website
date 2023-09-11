@@ -78,14 +78,14 @@ const Fileviewer: React.FC<FileviewerProps> = ({ endpoint }) => {
             setDragging(false);
           }}
           endpoint={endpoint}
-          className="rounded-md border border-dashed p-4 ut-button:mt-2 ut-button:transform ut-button:bg-orange-500 ut-button:px-4 ut-button:transition-all hover:ut-button:scale-105 ut-button:active:scale-95 ut-upload-icon:opacity-50 ut-readying:opacity-50 ut-uploading:ut-button:animate-spin ut-uploading:ut-button:cursor-not-allowed ut-uploading:ut-button:opacity-70"
+          className="max-h-48 min-h-[12rem] rounded-md border border-dashed bg-gray-50 p-4 ut-button:mt-2 ut-button:transform ut-button:bg-orange-500 ut-button:px-4 ut-button:transition-all hover:ut-button:scale-105 ut-button:active:scale-95 ut-upload-icon:opacity-50 ut-readying:opacity-50 ut-uploading:ut-button:animate-spin ut-uploading:ut-button:cursor-not-allowed ut-uploading:ut-button:opacity-70"
         />
       ) : (
         <div>
           {isLoading ? (
             "Loading..."
           ) : (
-            <div className="flex flex-col space-y-2 rounded-md border border-dashed bg-gray-50 p-4">
+            <div className="flex max-h-48 min-h-[12rem] flex-col space-y-2 overflow-y-scroll rounded-md border border-dashed bg-gray-50 p-4">
               {data?.songFiles.map((song, idx) => {
                 return (
                   <a href={song.url} key={idx}>
