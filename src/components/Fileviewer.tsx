@@ -12,9 +12,12 @@ interface FileviewerProps {
 
 const Fileviewer: React.FC<FileviewerProps> = ({ endpoint }) => {
   const viewerRef = useRef<HTMLDivElement>(null);
+  const utils = api.useContext();
   const [dragging, setDragging] = useState(false);
   const category = categorySchema.parse(endpoint.replace("Uploader", ""));
-  const { data } = api.example.getSongsByCategory.useQuery({ category });
+  const { data, isLoading } = api.example.getSongsByCategory.useQuery({
+    category,
+  });
 
   useEffect(() => {
     const curr = viewerRef.current;
@@ -45,7 +48,33 @@ const Fileviewer: React.FC<FileviewerProps> = ({ endpoint }) => {
     <div ref={viewerRef}>
       {dragging ? (
         <UploadDropzone
-          onClientUploadComplete={() => {
+          onClientUploadComplete={(f) => {
+            f?.forEach((file) => {
+              utils.example.getSongsByCategory.setData(
+                { category: category },
+                (prev) => {
+                  if (prev) {
+                    return {
+                      songFiles: [
+                        ...prev.songFiles,
+                        {
+                          clasification: category,
+                          name: file.name,
+                          url: file.url,
+                          id: file.key,
+                          metadata: {
+                            uploadedAt: Date.now(),
+                            uploadedBy: "TODO: get user id",
+                          },
+                        },
+                      ],
+                    };
+                  }
+
+                  return prev;
+                }
+              );
+            });
             setDragging(false);
           }}
           endpoint={endpoint}
@@ -53,7 +82,24 @@ const Fileviewer: React.FC<FileviewerProps> = ({ endpoint }) => {
         />
       ) : (
         <div>
-          <pre>{JSON.stringify(data, null, 2)}</pre>
+          {isLoading ? (
+            "Loading..."
+          ) : (
+            <div className="flex flex-col space-y-2 rounded-md border border-dashed bg-gray-50 p-4">
+              {data?.songFiles.map((song, idx) => {
+                return (
+                  <a href={song.url} key={idx}>
+                    {song.name.replace(".mp3", "")}
+                  </a>
+                );
+              })}
+              {data?.songFiles.length === 0 && (
+                <p className="opacity-60">
+                  No hay canciones. Arrastra una canción para subirla
+                </p>
+              )}
+            </div>
+          )}
         </div>
       )}
     </div>

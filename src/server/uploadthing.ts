@@ -34,6 +34,7 @@ export const ourFileRouter = {
         name: file.name,
         url: file.url,
       });
+      console.log("upload complete");
     }),
   happyUploader: f({ audio: { maxFileSize: "8MB", maxFileCount: 20 } })
     .middleware(authMiddleware)
