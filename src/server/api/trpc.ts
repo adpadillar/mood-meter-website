@@ -103,7 +103,7 @@ export const publicProcedure = t.procedure;
 const isAdmin = t.middleware(async (opts) => {
   const { ctx } = opts;
 
-  if (!ctx.auth.session) {
+  if (!ctx.auth.userId) {
     throw new TRPCError({
       code: "UNAUTHORIZED",
       cause: "Not logged in.",
@@ -113,7 +113,7 @@ const isAdmin = t.middleware(async (opts) => {
 
   return opts.next({
     ctx: {
-      session: ctx.auth.session,
+      userId: ctx.auth.userId,
     },
   });
 });

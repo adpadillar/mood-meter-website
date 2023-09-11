@@ -3,18 +3,9 @@ import verifyUser from "./auth/verifyUser";
 import { getFirestore } from "firebase-admin/firestore";
 import { serverApp } from "./firebase";
 import { type NextApiRequest } from "next";
+import { type FileDoc } from "./api/routers/schemas";
 
 const f = createUploadthing();
-
-interface FileDoc {
-  url: string;
-  name: string;
-  clasification: "sad" | "happy" | "scary" | "calm";
-  metadata: {
-    uploadedAt: number;
-    uploadedBy: string;
-  };
-}
 
 const uploadFileMetadata = async (f: FileDoc) => {
   const db = getFirestore(serverApp);
