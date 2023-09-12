@@ -41,6 +41,7 @@ const Fileviewer: React.FC<FileviewerProps> = ({ endpoint }) => {
                           name: file.name,
                           url: file.url,
                           id: file.key,
+                          random: -1,
                           metadata: {
                             uploadedAt: Date.now(),
                             uploadedBy: "TODO: get user id",

@@ -7,6 +7,7 @@ export type Category = z.infer<typeof categorySchema>;
 export const fileDocSchema = z.object({
   url: z.string(),
   name: z.string(),
+  random: z.number(), // For random index
   clasification: categorySchema,
   metadata: z.object({
     uploadedAt: z.number(),

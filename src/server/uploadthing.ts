@@ -30,6 +30,7 @@ export const ourFileRouter = {
     .onUploadComplete(async ({ metadata, file }) => {
       await uploadFileMetadata({
         clasification: "calm",
+        random: Math.random() * 100000,
         metadata,
         name: file.name,
         url: file.url,
@@ -41,6 +42,7 @@ export const ourFileRouter = {
     .onUploadComplete(async ({ metadata, file }) => {
       await uploadFileMetadata({
         clasification: "happy",
+        random: Math.random() * 100000,
         metadata,
         name: file.name,
         url: file.url,
@@ -51,6 +53,7 @@ export const ourFileRouter = {
     .onUploadComplete(async ({ metadata, file }) => {
       await uploadFileMetadata({
         clasification: "sad",
+        random: Math.random() * 100000,
         metadata,
         name: file.name,
         url: file.url,
@@ -61,6 +64,7 @@ export const ourFileRouter = {
     .onUploadComplete(async ({ metadata, file }) => {
       await uploadFileMetadata({
         clasification: "scary",
+        random: Math.random() * 100000,
         metadata,
         name: file.name,
         url: file.url,

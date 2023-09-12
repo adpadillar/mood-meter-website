@@ -4,17 +4,31 @@ import {
   publicProcedure,
 } from "~/server/api/trpc";
 import { z } from "zod";
-import songs from "~/songs/songs.json";
 import { getFirestore } from "firebase-admin/firestore";
 import { serverApp } from "~/server/firebase";
 import { type FileDoc, categorySchema, fileDocSchema } from "./schemas";
 
 export const mainRouter = createTRPCRouter({
-  getSong: publicProcedure.query(() => {
-    const { files } = songs;
-    const randomSong = files[Math.floor(Math.random() * files.length)];
+  getSong: publicProcedure.query(async () => {
+    const db = getFirestore(serverApp);
 
-    return randomSong;
+    const res = await db
+      .collection("files")
+      .where("random", ">=", Math.random() * 100000)
+      .orderBy("random")
+      .limit(1)
+      .get();
+
+    const fileDocs: Array<FileDoc> = [];
+
+    res.docs.forEach((doc) => {
+      console.log(doc);
+      const parsed = fileDocSchema.parse(doc.data());
+
+      fileDocs.push(parsed);
+    });
+
+    return fileDocs[0]?.url;
   }),
   getSongsByCategory: protectedProcedure
     .input(
