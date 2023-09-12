@@ -38,6 +38,7 @@ const Fileviewer: React.FC<FileviewerProps> = ({ endpoint }) => {
                         ...prev.songFiles,
                         {
                           clasification: category,
+                          expCount: -1,
                           name: file.name,
                           url: file.url,
                           id: file.key,

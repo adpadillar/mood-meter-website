@@ -12,6 +12,7 @@ const verifyUser = async (
 
   const allowedEmails: Record<string, true> = {
     "adpadillar25@gmail.com": true,
+    "nicole.arana.sasj@gmail.com": true,
   };
 
   if (user) {

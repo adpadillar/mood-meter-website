@@ -10,7 +10,9 @@ const f = createUploadthing();
 const uploadFileMetadata = async (f: FileDoc) => {
   const db = getFirestore(serverApp);
 
-  return db.collection("files").add(f);
+  const docRef = db.collection("files").doc();
+
+  return docRef.set({ ...f, id: docRef.id });
 };
 
 const authMiddleware = async ({ req }: { req: NextApiRequest }) => {
@@ -34,6 +36,7 @@ export const ourFileRouter = {
         metadata,
         name: file.name,
         url: file.url,
+        expCount: 0,
       });
       console.log("upload complete");
     }),
@@ -46,6 +49,7 @@ export const ourFileRouter = {
         metadata,
         name: file.name,
         url: file.url,
+        expCount: 0,
       });
     }),
   sadUploader: f({ audio: { maxFileSize: "16MB", maxFileCount: 50 } })
@@ -57,6 +61,7 @@ export const ourFileRouter = {
         metadata,
         name: file.name,
         url: file.url,
+        expCount: 0,
       });
     }),
   scaryUploader: f({ audio: { maxFileSize: "16MB", maxFileCount: 50 } })
@@ -68,6 +73,7 @@ export const ourFileRouter = {
         metadata,
         name: file.name,
         url: file.url,
+        expCount: 0,
       });
     }),
 } satisfies FileRouter;

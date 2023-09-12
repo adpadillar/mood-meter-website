@@ -11,7 +11,8 @@ const Home: NextPage<HomeProps> = () => {
       <h1 className="text-4xl font-extrabold">
         ¡Escoge la emoción de esta canción!
       </h1>
-      <Experiment />
+      <Experiment category="calm" />
+      <Experiment category="happy" />
     </div>
   );
 };
