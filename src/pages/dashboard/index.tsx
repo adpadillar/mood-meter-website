@@ -12,7 +12,7 @@ interface DashboardProps {
 const Dashboard: NextPage<DashboardProps> = () => {
   return (
     <div className="flex w-full items-center justify-center">
-      <div className="max-w-5xl p-4">
+      <div className="w-full max-w-5xl p-4">
         <div className="flex items-center justify-between py-4">
           <h1 className="font-bold">Neurosense Art</h1>
           <UserButton />
