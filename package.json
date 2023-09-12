@@ -3,11 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "build": "npm run pre && next build",
-    "dev": "npm run pre && next dev",
+    "build": "next build",
+    "dev": "next dev",
     "lint": "next lint",
-    "start": "next start",
-    "pre": "node ./scripts/pre.mjs"
+    "start": "next start"
   },
   "dependencies": {
     "@clerk/nextjs": "^4.23.5",
