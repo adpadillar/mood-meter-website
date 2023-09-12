@@ -11,7 +11,6 @@ const SongPreview: React.FC<SongPreviewProps> = ({ song }) => {
   const [playing, setPlaying] = useState(false);
 
   useEffect(() => {
-    console.log("new audio");
     const audio = new Audio(song.url);
     audio.load();
     audio.pause();
