@@ -22,7 +22,6 @@ export const mainRouter = createTRPCRouter({
     const fileDocs: Array<FileDoc> = [];
 
     res.docs.forEach((doc) => {
-      console.log(doc);
       const parsed = fileDocSchema.parse(doc.data());
 
       fileDocs.push(parsed);
