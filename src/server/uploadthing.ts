@@ -25,7 +25,7 @@ const authMiddleware = async ({ req }: { req: NextApiRequest }) => {
 
 // FileRouter for your app, can contain multiple FileRoutes
 export const ourFileRouter = {
-  calmUploader: f({ audio: { maxFileSize: "8MB", maxFileCount: 50 } })
+  calmUploader: f({ audio: { maxFileSize: "16MB", maxFileCount: 50 } })
     .middleware(authMiddleware)
     .onUploadComplete(async ({ metadata, file }) => {
       await uploadFileMetadata({
@@ -36,7 +36,7 @@ export const ourFileRouter = {
       });
       console.log("upload complete");
     }),
-  happyUploader: f({ audio: { maxFileSize: "8MB", maxFileCount: 50 } })
+  happyUploader: f({ audio: { maxFileSize: "16MB", maxFileCount: 50 } })
     .middleware(authMiddleware)
     .onUploadComplete(async ({ metadata, file }) => {
       await uploadFileMetadata({
@@ -46,7 +46,7 @@ export const ourFileRouter = {
         url: file.url,
       });
     }),
-  sadUploader: f({ audio: { maxFileSize: "8MB", maxFileCount: 50 } })
+  sadUploader: f({ audio: { maxFileSize: "16MB", maxFileCount: 50 } })
     .middleware(authMiddleware)
     .onUploadComplete(async ({ metadata, file }) => {
       await uploadFileMetadata({
@@ -56,7 +56,7 @@ export const ourFileRouter = {
         url: file.url,
       });
     }),
-  scaryUploader: f({ audio: { maxFileSize: "8MB", maxFileCount: 50 } })
+  scaryUploader: f({ audio: { maxFileSize: "16MB", maxFileCount: 50 } })
     .middleware(authMiddleware)
     .onUploadComplete(async ({ metadata, file }) => {
       await uploadFileMetadata({
