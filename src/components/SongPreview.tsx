@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { type FileDoc } from "~/server/api/routers/schemas";
 
 interface SongPreviewProps {
@@ -10,21 +10,17 @@ const SongPreview: React.FC<SongPreviewProps> = ({ song }) => {
   const [audio, setAudio] = useState<HTMLAudioElement>();
   const [playing, setPlaying] = useState(false);
 
-  useEffect(() => {
-    const audio = new Audio(song.url);
-    audio.load();
-    audio.pause();
-    setAudio(audio);
-  }, [song]);
-
   const play = () => {
     if (audio) {
       void audio.play();
       setPlaying(true);
-
-      setTimeout(() => {
-        pause();
-      }, 15 * 1000);
+    } else {
+      const audio = new Audio(song.url);
+      audio.load();
+      audio.pause();
+      setAudio(audio);
+      setPlaying(true);
+      void audio.play();
     }
   };
 
