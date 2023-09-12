@@ -9,7 +9,13 @@ interface ExperimentProps {
 }
 
 const Experiment: React.FC<ExperimentProps> = () => {
-  const { data, isLoading } = api.example.getSong.useQuery();
+  const { data, isLoading } = api.example.getSong.useQuery(undefined, {
+    refetchOnWindowFocus: false,
+    refetchInterval: false,
+    refetchIntervalInBackground: false,
+    refetchOnMount: false,
+    refetchOnReconnect: false,
+  });
   const [started, setStarted] = useState(false);
   const [x, setX] = useState(0);
   const [y, setY] = useState(0);
