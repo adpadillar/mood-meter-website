@@ -1,7 +1,17 @@
 import React, { useState, useEffect, useRef } from "react";
 
 interface MoodpickerProps {
-  onChange: (x: number, y: number) => void;
+  onChange: ({
+    x,
+    y,
+    initialX,
+    initialY,
+  }: {
+    x: number;
+    y: number;
+    initialX: number;
+    initialY: number;
+  }) => void;
   height?: number;
   width?: number;
   pickerSize?: number;
@@ -13,15 +23,19 @@ const Moodpicker: React.FC<MoodpickerProps> = ({
   width = 300,
   pickerSize = 10,
 }) => {
+  const [xInitial, yInitial] = [
+    (width - pickerSize) / 2 + 1,
+    (height - pickerSize) / 2 + 1,
+  ];
   const [isDragging, setIsDragging] = useState(false);
-  const [x, setX] = useState((width - pickerSize) / 2 + 1);
-  const [y, setY] = useState((height - pickerSize) / 2 + 1);
+  const [x, setX] = useState(xInitial);
+  const [y, setY] = useState(yInitial);
   const pickerRef = useRef<HTMLDivElement>(null);
   const dotRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    onChange(x, y);
-  }, [x, y, onChange]);
+    onChange({ x, y, initialX: xInitial, initialY: yInitial });
+  }, [x, y, onChange, xInitial, yInitial]);
 
   const handleMove = (clientX: number, clientY: number) => {
     if (pickerRef.current && dotRef.current) {

@@ -7,7 +7,9 @@ import { type FileDoc } from "./api/routers/schemas";
 
 const f = createUploadthing();
 
-const uploadFileMetadata = async (f: FileDoc) => {
+// Whats the opposite of Pick in ts?
+
+const uploadFileMetadata = async (f: Omit<FileDoc, "id">) => {
   const db = getFirestore(serverApp);
 
   const docRef = db.collection("files").doc();

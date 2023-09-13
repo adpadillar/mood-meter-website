@@ -7,6 +7,7 @@ interface SongplayerProps {
   isLoading?: boolean;
   startSeconds?: number;
 
+  onEnd?: () => void;
   onPlay?: () => void;
 }
 
@@ -14,7 +15,7 @@ const Songplayer: React.FC<SongplayerProps> = ({
   songSrc,
   isLoading = false,
   startSeconds = 0,
-
+  onEnd,
   onPlay,
 }) => {
   const [audio, setAudio] = useState<HTMLAudioElement>();
@@ -37,6 +38,7 @@ const Songplayer: React.FC<SongplayerProps> = ({
       setPlaying(true);
 
       setTimeout(() => {
+        onEnd?.();
         pause();
       }, 15 * 1000);
     }

@@ -14,7 +14,15 @@ export const fileDocSchema = z.object({
     uploadedAt: z.number(),
     uploadedBy: z.string(),
   }),
-  id: z.string().optional(), // Id of the file in the database
+  id: z.string(), // Id of the file in the database
 });
 
 export type FileDoc = z.infer<typeof fileDocSchema>;
+
+export const experimentSchema = z.object({
+  pleasentness: z.number(),
+  energy: z.number(),
+  songId: z.string(),
+  createdAt: z.number(),
+  classification: categorySchema,
+});

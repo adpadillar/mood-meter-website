@@ -3,16 +3,22 @@ import Timer from "./Timer";
 import Songplayer from "./Songplayer";
 import Picker from "./Picker";
 import { api } from "~/utils/api";
-import { type Category } from "~/server/api/routers/schemas";
+import { Button } from "@nextui-org/react";
 
 interface ExperimentProps {
   children?: React.ReactNode;
-  category: Category;
 }
 
-const Experiment: React.FC<ExperimentProps> = ({ category }) => {
-  const { data, isLoading } = api.example.getSong.useQuery(
-    { category },
+const Experiment: React.FC<ExperimentProps> = () => {
+  const { mutate } = api.example.uploadSongExperiment.useMutation({
+    onSuccess: async () => {
+      setFinishedSong(false);
+      setMovedPicker(false);
+      await refetch();
+    },
+  });
+  const { data, isLoading, refetch } = api.example.getExperimentSong.useQuery(
+    undefined,
     {
       refetchOnWindowFocus: false,
       refetchInterval: false,
@@ -21,9 +27,14 @@ const Experiment: React.FC<ExperimentProps> = ({ category }) => {
       refetchOnReconnect: false,
     }
   );
+
+  const [finishedSong, setFinishedSong] = useState(false);
+  const [movedPicker, setMovedPicker] = useState(false);
   const [started, setStarted] = useState(false);
-  const [x, setX] = useState(0);
-  const [y, setY] = useState(0);
+  const [pleasentness, setPleasentness] = useState(0);
+  const [energy, setEnergy] = useState(0);
+
+  const readyToRate = finishedSong && movedPicker;
 
   return (
     <>
@@ -36,25 +47,54 @@ const Experiment: React.FC<ExperimentProps> = ({ category }) => {
         }}
       />
       <Songplayer
-        onPlay={() => {
-          setStarted(true);
-        }}
+        onPlay={() => setStarted(true)}
+        onEnd={() => setFinishedSong(true)}
         isLoading={isLoading}
-        songSrc={data}
+        songSrc={data?.url}
         startSeconds={5}
       />
+      {data && (
+        <Button
+          onClick={
+            !readyToRate
+              ? undefined
+              : () =>
+                  mutate({
+                    experiment: {
+                      createdAt: Date.now(),
+                      energy,
+                      pleasentness,
+                      songId: data.id,
+                      classification: data.clasification,
+                    },
+                    id: data.id,
+                  })
+          }
+          color={!readyToRate ? "default" : "primary"}
+          disabled={!readyToRate}
+          title={!readyToRate ? "Play song and rate it first" : undefined}
+          className={
+            !readyToRate ? "cursor-not-allowed opacity-60" : "opacity-100"
+          }
+        >
+          Rate Song
+        </Button>
+      )}
       <Picker
-        height={200}
-        onChange={(x, y) => {
-          setX(x);
-          setY(y);
+        height={310}
+        width={310}
+        onChange={({ x, y, initialX, initialY }) => {
+          setPleasentness(x);
+          setEnergy(y);
+          if (x !== initialX || y !== initialY) {
+            setMovedPicker(true);
+          }
         }}
       />
       <div>
         <p>
-          x: {x} y: {y}
+          x: {pleasentness} y: {energy}
         </p>
-        <p>Experiment type: {category}</p>
       </div>
     </>
   );
